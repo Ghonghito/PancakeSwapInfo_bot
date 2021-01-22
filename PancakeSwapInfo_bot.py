@@ -29,14 +29,14 @@ print(w3.isConnected())
 def start_command(message):
     bot.reply_to(message, "გამარჯობა 🥳 მე PancakeSwap-ის ბოტი ვარ და შემიძლია შენი მისამართით გაგიგო რომელ Pool-ში რამდენი ტოკენი დააგროვე და ასევე " + \
                           "ყველა საჭირო ინფრომაციას დავთვლი 😎 უბრალოდ შენი მისამართი მომწერე." + "\n" + "\n" + \
-                          "ჯერ მხოლოდ 8 Pool-ზე შემიძლია ინფორმაცია მოგაწოდო: *CAKE, REEF, DITTO, bALBT, TEN, BSCX, BTCST და FRONT*", parse_mode='Markdown')
+                          "ჯერ მხოლოდ 9 Pool-ზე შემიძლია ინფორმაცია მოგაწოდო: *CAKE, REEF, DITTO, bALBT, TEN, BSCX, BTCST, FRONT და HELMET*", parse_mode='Markdown')
                           
                           
 @bot.message_handler(commands=['help'])
 def help_command(message):
     bot.reply_to(message, "გამარჯობა 🥳 მე PancakeSwap-ის ბოტი ვარ და შემიძლია შენი მისამართით გაგიგო რომელ Pool-ში რამდენი ტოკენი დააგროვე და ასევე " + \
                           "ყველა საჭირო ინფრომაციას დავთვლი 😎 უბრალოდ შენი მისამართი მომწერე." + "\n" + "\n" + \
-                          "ჯერ მხოლოდ 8 Pool-ზე შემიძლია ინფორმაცია მოგაწოდო: *CAKE, REEF, DITTO, bALBT, TEN, BSCX, BTCST და FRONT*", parse_mode='Markdown')
+                          "ჯერ მხოლოდ 9 Pool-ზე შემიძლია ინფორმაცია მოგაწოდო: *CAKE, REEF, DITTO, bALBT, TEN, BSCX, BTCST, FRONT და HELMET*", parse_mode='Markdown')
 
 
 try:
@@ -93,7 +93,7 @@ def contract_checker(guy):
     print(info_from_contract)
     print(cake_list)
     if check_if_zeros == True and cake_list[0] == 0:
-        return "ამ მისამართით CAKE, REEF, DITTO, bALBT, TEN, BSCX, BTCST და FRONT Pool-ში CAKE არ არის დასტეიკებული!"
+        return "ამ მისამართით CAKE, REEF, DITTO, bALBT, TEN, BSCX, BTCST, FRONT და HELMET Pool-ში CAKE არ არის დასტეიკებული!"
     else:
         reef_pool = info_from_contract[0]
         ditto_pool = info_from_contract[1]
@@ -101,7 +101,8 @@ def contract_checker(guy):
         ten_pool = info_from_contract[3]
         bscx_pool = info_from_contract[4]
         btcst_pool = info_from_contract[5]
-        front_pool = info_from_contract[6]
+        helmet_pool = info_from_contract[6]
+        front_pool = info_from_contract[7]
         cake_pool = cake_list[0]
         if cake_pool > 0:
             token_id = 'pancakeswap-token'
@@ -121,7 +122,7 @@ def contract_checker(guy):
                 coin_list_price.append(coin_fasi)
             info = cake_calculations(pending_cake, staked_cake, coin_list_price, cakepool)
             info_earnd.append(info)
-            print(info_earnd)
+            
         else:
             pass
 
@@ -149,7 +150,7 @@ def contract_checker(guy):
             cakepool = (int(qeiqebi["result"]) / 1000000000000000000)
             info = calculations(coin_name, pending_reward, staked_cake, reward_per_block, coin_list_price, cakepool, sm, end_block, latest_block)
             info_earnd.append(info)
-            print(info_earnd)
+            
         else:
             pass
 
@@ -177,7 +178,7 @@ def contract_checker(guy):
             cakepool = (int(qeiqebi["result"]) / 1000000000000000000)
             info = calculations(coin_name, pending_reward, staked_cake, reward_per_block, coin_list_price, cakepool, sm, end_block, latest_block)
             info_earnd.append(info)
-            print(info_earnd)
+            
         else:
             pass
 
@@ -205,7 +206,7 @@ def contract_checker(guy):
             cakepool = (int(qeiqebi["result"]) / 1000000000000000000)
             info = calculations(coin_name, pending_reward, staked_cake, reward_per_block, coin_list_price, cakepool, sm, end_block, latest_block)
             info_earnd.append(info)
-            print(info_earnd)
+            
         else:
             pass
 
@@ -233,7 +234,7 @@ def contract_checker(guy):
             cakepool = (int(qeiqebi["result"]) / 1000000000000000000)
             info = calculations(coin_name, pending_reward, staked_cake, reward_per_block, coin_list_price, cakepool, sm, end_block, latest_block)
             info_earnd.append(info)
-            print(info_earnd)
+            
         else:
             pass
 
@@ -261,7 +262,7 @@ def contract_checker(guy):
             cakepool = (int(qeiqebi["result"]) / 1000000000000000000)
             info = calculations(coin_name, pending_reward, staked_cake, reward_per_block, coin_list_price, cakepool, sm, end_block, latest_block)
             info_earnd.append(info)
-            print(info_earnd)
+            
         else:
             pass
         
@@ -289,13 +290,13 @@ def contract_checker(guy):
             cakepool = (int(qeiqebi["result"]) / 1000000000000000000)
             info = calculations(coin_name, pending_reward, staked_cake, reward_per_block, coin_list_price, cakepool, sm, end_block, latest_block)
             info_earnd.append(info)
-            print(info_earnd)
+            
         else:
             pass
 
-        if front_pool > 0:
-            token_id = 'frontier-token'
-            coin_name = ' FRONT'
+        if helmet_pool > 0:
+            token_id = 'helmet-insure'
+            coin_name = ' HELMET'
             addr = contract_list_address[6]
             abi = contract_list_abi[6]
             sm = w3.eth.contract(addr, abi=abi)
@@ -319,6 +320,34 @@ def contract_checker(guy):
             info_earnd.append(info)
         else:
             pass
+
+        if front_pool > 0:
+            token_id = 'frontier-token'
+            coin_name = ' FRONT'
+            addr = contract_list_address[7]
+            abi = contract_list_abi[7]
+            sm = w3.eth.contract(addr, abi=abi)
+            staked_cake = sm.functions.userInfo(guy).call()[0]
+            pending_reward = sm.functions.pendingReward(guy).call() / 1000000000000000000
+            reward_per_block = sm.functions.rewardPerBlock().call() / 1000000000000000000
+            latest_block = w3.eth.blockNumber
+            end_block = sm.functions.bonusEndBlock().call()
+            coin_list = [token_id, 'binancecoin', 'bitcoin', 'ethereum', 'pancakeswap-token']
+            coin_list_price = []
+            for coinfasi in coin_list:
+                coin_price = cg.get_price(ids=coinfasi, vs_currencies='usd')
+                coin_fasi = coin_price[coinfasi]['usd']
+                coin_list_price.append(coin_fasi)
+            contract_address = contract_list_address[7]
+            totalstakedcake = "https://api.bscscan.com/api?module=account&action=tokenbalance&contractaddress=0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82&address=" + contract_address + "&tag=latest"
+            response = requests.get(totalstakedcake)
+            qeiqebi = response.json()
+            cakepool = (int(qeiqebi["result"]) / 1000000000000000000)
+            info = calculations(coin_name, pending_reward, staked_cake, reward_per_block, coin_list_price, cakepool, sm, end_block, latest_block)
+            info_earnd.append(info)
+        else:
+            pass
+        print(info_earnd)
         print_all = ('\n'.join(map(str, info_earnd))) + "\n"
         return print_all
 
@@ -582,9 +611,6 @@ def send_pcs_info(message: Message):
         contract_balances.clear()
     else:
         bot.send_message(cid, "❌ CoinGecko-ს API-სთან კავშირი დროებით შეუძლებელია ❌")
-
-
-
 
 @bot.message_handler(func=lambda message: True)
 def get_info_pool(message):
