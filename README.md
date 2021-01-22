@@ -15,6 +15,8 @@ Bot link: https://t.me/PancakeSwapInfo_bot
 6) Display the price of that coin according to Staking Pool.
 7) Display the price of CAKE.
 8) Shows the time how long the Staking Pool will end.
+9) Get $CAKE Price and other info
+10) Get info about how much CAKE is staked in Staking and Farming Pools + TVL.
 
 ## How long does the bot update the information?
 ```
