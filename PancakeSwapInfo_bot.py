@@ -13,7 +13,7 @@ from pycoingecko import CoinGeckoAPI
 from web3 import Web3, HTTPProvider, IPCProvider
 
 cg = CoinGeckoAPI()
-bot_token = 'BOT_API_TOKEN'
+bot_token = 'BOT_TOKEN'
 
 logger = telebot.logger
 telebot.logger.setLevel(logging.DEBUG)
@@ -27,17 +27,18 @@ print(w3.isConnected())
 
 @bot.message_handler(commands=['start'])
 def start_command(message):
-    bot.reply_to(message, "გამარჯობა 🥳 მე PancakeSwap-ის ბოტი ვარ და შემიძლია შენი მისამართით გაგიგო რომელ Pool-ში რამდენი ტოკენი დააგროვე და ასევე " + \
-                          "ყველა საჭირო ინფრომაციას დავთვლი 😎 უბრალოდ შენი მისამართი მომწერე." + "\n" + "\n" + \
-                          "ჯერ მხოლოდ 9 Pool-ზე შემიძლია ინფორმაცია მოგაწოდო: *CAKE, REEF, DITTO, bALBT, TEN, BSCX, BTCST, FRONT და HELMET*", parse_mode='Markdown')
-                          
-                          
-@bot.message_handler(commands=['help'])
+    cid = message.chat.id
+    bot.send_message(cid, "🔰 გამარჯობა 🥳 მე PancakeSwap-ის ბოტი ვარ და შემიძლია შენი მისამართით გაგიგო რომელ Pool-ში რამდენი ტოკენი დააგროვე და ასევე " + \
+                          "ყველა საჭირო ინფრომაციას დავთვლი უბრალოდ შენი მისამართი მომწერე." + "\n" + "\n" + \
+                          "🔰 ჯერ მხოლოდ 9 Pool-ზე შემიძლია ინფორმაცია მოგაწოდო: *CAKE, DITTO, HGET, BDO, EGLD, UST, WSOTE, FRON, HELMET, BTCST და BSCX.*" + "\n" + "\n" + \
+                          "🔰 ბრძანებების სანახავად უბრალოდ დაწერე `ბრძანებები`", parse_mode='Markdown')
+                              
+@bot.message_handler(func=lambda message: message.text == "ბრძანებები")
 def help_command(message):
-    bot.reply_to(message, "გამარჯობა 🥳 მე PancakeSwap-ის ბოტი ვარ და შემიძლია შენი მისამართით გაგიგო რომელ Pool-ში რამდენი ტოკენი დააგროვე და ასევე " + \
-                          "ყველა საჭირო ინფრომაციას დავთვლი 😎 უბრალოდ შენი მისამართი მომწერე." + "\n" + "\n" + \
-                          "ჯერ მხოლოდ 9 Pool-ზე შემიძლია ინფორმაცია მოგაწოდო: *CAKE, REEF, DITTO, bALBT, TEN, BSCX, BTCST, FRONT და HELMET*", parse_mode='Markdown')
-
+    cid = message.chat.id
+    bot.send_message(cid, "🔰 თუ გინდა იცოდე რამდენი დააგროვე *CAKE, DITTO, HGET, BDO, EGLD, UST, WSOTE, FRON, HELMET, BTCST და BSCX* Pool-ში მაშინ უბრალოდ მისამართი მომწერე." + "\n" + "\n" + \
+                          "🔰 cake, cake? ან /p cake - თუ მომწერ მაშინ $CAKE-ის ფასს გაჩვენებ." + "\n" + "\n" + \
+                          "🔰 /pcs - თუ მომწერ მაშინ PancakeSwap-ის სტატისტიკას განახებ.", parse_mode='Markdown')
 
 try:
     get_gel = requests.get("https://transferwise.com/gb/currency-converter/usd-to-gel-rate")
@@ -64,16 +65,20 @@ def contract_checker(guy):
     cake_addr = '0x73feaa1eE314F8c655E354234017bE2193C9E24E'
     cake_abi = '[{"inputs":[{"internalType":"contract CakeToken","name":"_cake","type":"address"},{"internalType":"contract SyrupBar","name":"_syrup","type":"address"},{"internalType":"address","name":"_devaddr","type":"address"},{"internalType":"uint256","name":"_cakePerBlock","type":"uint256"},{"internalType":"uint256","name":"_startBlock","type":"uint256"}],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":true,"internalType":"uint256","name":"pid","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"Deposit","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":true,"internalType":"uint256","name":"pid","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"EmergencyWithdraw","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":true,"internalType":"uint256","name":"pid","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"Withdraw","type":"event"},{"inputs":[],"name":"BONUS_MULTIPLIER","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_allocPoint","type":"uint256"},{"internalType":"contract IBEP20","name":"_lpToken","type":"address"},{"internalType":"bool","name":"_withUpdate","type":"bool"}],"name":"add","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"cake","outputs":[{"internalType":"contract CakeToken","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"cakePerBlock","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_pid","type":"uint256"},{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"deposit","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_devaddr","type":"address"}],"name":"dev","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"devaddr","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_pid","type":"uint256"}],"name":"emergencyWithdraw","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"enterStaking","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_from","type":"uint256"},{"internalType":"uint256","name":"_to","type":"uint256"}],"name":"getMultiplier","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"leaveStaking","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"massUpdatePools","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_pid","type":"uint256"}],"name":"migrate","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"migrator","outputs":[{"internalType":"contract IMigratorChef","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_pid","type":"uint256"},{"internalType":"address","name":"_user","type":"address"}],"name":"pendingCake","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"poolInfo","outputs":[{"internalType":"contract IBEP20","name":"lpToken","type":"address"},{"internalType":"uint256","name":"allocPoint","type":"uint256"},{"internalType":"uint256","name":"lastRewardBlock","type":"uint256"},{"internalType":"uint256","name":"accCakePerShare","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"poolLength","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_pid","type":"uint256"},{"internalType":"uint256","name":"_allocPoint","type":"uint256"},{"internalType":"bool","name":"_withUpdate","type":"bool"}],"name":"set","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"contract IMigratorChef","name":"_migrator","type":"address"}],"name":"setMigrator","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"startBlock","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"syrup","outputs":[{"internalType":"contract SyrupBar","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalAllocPoint","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"multiplierNumber","type":"uint256"}],"name":"updateMultiplier","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_pid","type":"uint256"}],"name":"updatePool","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"},{"internalType":"address","name":"","type":"address"}],"name":"userInfo","outputs":[{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"uint256","name":"rewardDebt","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_pid","type":"uint256"},{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"withdraw","outputs":[],"stateMutability":"nonpayable","type":"function"}]'
     
-    contract_list_address = ['0x1500fA1AFBFE4f4277ED0345cdf12b2C9cA7e139',   
-                             '0x624ef5C2C6080Af188AF96ee5B3160Bb28bb3E02',
-                             '0x3cc08B7C6A31739CfEd9d8d38b484FDb245C79c8', 
-                             '0x4A26b082B432B060B1b00A84eE4E823F04a6f69a', 
-                             '0x108BFE84Ca8BCe0741998cb0F60d313823cEC143',
-                             '0xB6fd2724cc9c90DD31DA35DbDf0300009dceF97d', 
-                             '0x9F23658D5f4CEd69282395089B0f8E4dB85C6e79', 
-                             '0xf7a31366732F08E8e6B88519dC3E827e04616Fc9']
+    contract_list_address = ['0x624ef5C2C6080Af188AF96ee5B3160Bb28bb3E02',
+                             '0xcCD0b93cC6ce3dC6dFaA9DB68f70e5C8455aC5bd',
+                             '0x9cB24e9460351bC51d4066BC6AEd1F3809b02B78',
+                             '0x2dcf4cDFf4Dd954683Fe0a6123077f8a025b66cF',
+                             '0x6EFa207ACdE6e1caB77c1322CbdE9628929ba88F',
+                             '0xD0b738eC507571176D40f28bd56a0120E375f73a',
+                             '0xf7a31366732F08E8e6B88519dC3E827e04616Fc9',
+                             '0x9F23658D5f4CEd69282395089B0f8E4dB85C6e79',
+                             '0xB6fd2724cc9c90DD31DA35DbDf0300009dceF97d',
+                             '0x108BFE84Ca8BCe0741998cb0F60d313823cEC143']
 
     contract_list_abi = ['[{"inputs":[{"internalType":"contract IBEP20","name":"_syrup","type":"address"},{"internalType":"contract IBEP20","name":"_rewardToken","type":"address"},{"internalType":"uint256","name":"_rewardPerBlock","type":"uint256"},{"internalType":"uint256","name":"_startBlock","type":"uint256"},{"internalType":"uint256","name":"_bonusEndBlock","type":"uint256"}],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"Deposit","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"EmergencyWithdraw","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"Withdraw","type":"event"},{"inputs":[],"name":"bonusEndBlock","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"deposit","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"emergencyRewardWithdraw","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"emergencyWithdraw","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_from","type":"uint256"},{"internalType":"uint256","name":"_to","type":"uint256"}],"name":"getMultiplier","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"massUpdatePools","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_user","type":"address"}],"name":"pendingReward","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"poolInfo","outputs":[{"internalType":"contract IBEP20","name":"lpToken","type":"address"},{"internalType":"uint256","name":"allocPoint","type":"uint256"},{"internalType":"uint256","name":"lastRewardBlock","type":"uint256"},{"internalType":"uint256","name":"accCakePerShare","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"rewardPerBlock","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"rewardToken","outputs":[{"internalType":"contract IBEP20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"startBlock","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"stopReward","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"syrup","outputs":[{"internalType":"contract IBEP20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_pid","type":"uint256"}],"name":"updatePool","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"userInfo","outputs":[{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"uint256","name":"rewardDebt","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"withdraw","outputs":[],"stateMutability":"nonpayable","type":"function"}]', 
+                         '[{"inputs":[{"internalType":"contract IBEP20","name":"_syrup","type":"address"},{"internalType":"contract IBEP20","name":"_rewardToken","type":"address"},{"internalType":"uint256","name":"_rewardPerBlock","type":"uint256"},{"internalType":"uint256","name":"_startBlock","type":"uint256"},{"internalType":"uint256","name":"_bonusEndBlock","type":"uint256"}],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"Deposit","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"EmergencyWithdraw","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"Withdraw","type":"event"},{"inputs":[],"name":"bonusEndBlock","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"deposit","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"emergencyRewardWithdraw","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"emergencyWithdraw","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_from","type":"uint256"},{"internalType":"uint256","name":"_to","type":"uint256"}],"name":"getMultiplier","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"massUpdatePools","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_user","type":"address"}],"name":"pendingReward","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"poolInfo","outputs":[{"internalType":"contract IBEP20","name":"lpToken","type":"address"},{"internalType":"uint256","name":"allocPoint","type":"uint256"},{"internalType":"uint256","name":"lastRewardBlock","type":"uint256"},{"internalType":"uint256","name":"accCakePerShare","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"rewardPerBlock","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"rewardToken","outputs":[{"internalType":"contract IBEP20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"startBlock","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"stopReward","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"syrup","outputs":[{"internalType":"contract IBEP20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_pid","type":"uint256"}],"name":"updatePool","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"userInfo","outputs":[{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"uint256","name":"rewardDebt","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"withdraw","outputs":[],"stateMutability":"nonpayable","type":"function"}]',
+                         '[{"inputs":[{"internalType":"contract IBEP20","name":"_syrup","type":"address"},{"internalType":"contract IBEP20","name":"_rewardToken","type":"address"},{"internalType":"uint256","name":"_rewardPerBlock","type":"uint256"},{"internalType":"uint256","name":"_startBlock","type":"uint256"},{"internalType":"uint256","name":"_bonusEndBlock","type":"uint256"}],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"Deposit","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"EmergencyWithdraw","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"Withdraw","type":"event"},{"inputs":[],"name":"bonusEndBlock","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"deposit","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"emergencyRewardWithdraw","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"emergencyWithdraw","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_from","type":"uint256"},{"internalType":"uint256","name":"_to","type":"uint256"}],"name":"getMultiplier","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"massUpdatePools","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_user","type":"address"}],"name":"pendingReward","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"poolInfo","outputs":[{"internalType":"contract IBEP20","name":"lpToken","type":"address"},{"internalType":"uint256","name":"allocPoint","type":"uint256"},{"internalType":"uint256","name":"lastRewardBlock","type":"uint256"},{"internalType":"uint256","name":"accCakePerShare","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"rewardPerBlock","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"rewardToken","outputs":[{"internalType":"contract IBEP20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"startBlock","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"stopReward","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"syrup","outputs":[{"internalType":"contract IBEP20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_pid","type":"uint256"}],"name":"updatePool","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"userInfo","outputs":[{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"uint256","name":"rewardDebt","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"withdraw","outputs":[],"stateMutability":"nonpayable","type":"function"}]',
                          '[{"inputs":[{"internalType":"contract IBEP20","name":"_syrup","type":"address"},{"internalType":"contract IBEP20","name":"_rewardToken","type":"address"},{"internalType":"uint256","name":"_rewardPerBlock","type":"uint256"},{"internalType":"uint256","name":"_startBlock","type":"uint256"},{"internalType":"uint256","name":"_bonusEndBlock","type":"uint256"}],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"Deposit","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"EmergencyWithdraw","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"Withdraw","type":"event"},{"inputs":[],"name":"bonusEndBlock","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"deposit","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"emergencyRewardWithdraw","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"emergencyWithdraw","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_from","type":"uint256"},{"internalType":"uint256","name":"_to","type":"uint256"}],"name":"getMultiplier","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"massUpdatePools","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_user","type":"address"}],"name":"pendingReward","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"poolInfo","outputs":[{"internalType":"contract IBEP20","name":"lpToken","type":"address"},{"internalType":"uint256","name":"allocPoint","type":"uint256"},{"internalType":"uint256","name":"lastRewardBlock","type":"uint256"},{"internalType":"uint256","name":"accCakePerShare","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"rewardPerBlock","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"rewardToken","outputs":[{"internalType":"contract IBEP20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"startBlock","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"stopReward","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"syrup","outputs":[{"internalType":"contract IBEP20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_pid","type":"uint256"}],"name":"updatePool","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"userInfo","outputs":[{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"uint256","name":"rewardDebt","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"withdraw","outputs":[],"stateMutability":"nonpayable","type":"function"}]',
                          '[{"inputs":[{"internalType":"contract IBEP20","name":"_syrup","type":"address"},{"internalType":"contract IBEP20","name":"_rewardToken","type":"address"},{"internalType":"uint256","name":"_rewardPerBlock","type":"uint256"},{"internalType":"uint256","name":"_startBlock","type":"uint256"},{"internalType":"uint256","name":"_bonusEndBlock","type":"uint256"}],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"Deposit","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"EmergencyWithdraw","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"Withdraw","type":"event"},{"inputs":[],"name":"bonusEndBlock","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"deposit","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"emergencyRewardWithdraw","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"emergencyWithdraw","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_from","type":"uint256"},{"internalType":"uint256","name":"_to","type":"uint256"}],"name":"getMultiplier","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"massUpdatePools","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_user","type":"address"}],"name":"pendingReward","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"poolInfo","outputs":[{"internalType":"contract IBEP20","name":"lpToken","type":"address"},{"internalType":"uint256","name":"allocPoint","type":"uint256"},{"internalType":"uint256","name":"lastRewardBlock","type":"uint256"},{"internalType":"uint256","name":"accCakePerShare","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"rewardPerBlock","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"rewardToken","outputs":[{"internalType":"contract IBEP20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"startBlock","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"stopReward","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"syrup","outputs":[{"internalType":"contract IBEP20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_pid","type":"uint256"}],"name":"updatePool","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"userInfo","outputs":[{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"uint256","name":"rewardDebt","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"withdraw","outputs":[],"stateMutability":"nonpayable","type":"function"}]',
                          '[{"inputs":[{"internalType":"contract IBEP20","name":"_syrup","type":"address"},{"internalType":"contract IBEP20","name":"_rewardToken","type":"address"},{"internalType":"uint256","name":"_rewardPerBlock","type":"uint256"},{"internalType":"uint256","name":"_startBlock","type":"uint256"},{"internalType":"uint256","name":"_bonusEndBlock","type":"uint256"}],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"Deposit","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"EmergencyWithdraw","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"Withdraw","type":"event"},{"inputs":[],"name":"bonusEndBlock","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"deposit","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"emergencyRewardWithdraw","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"emergencyWithdraw","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_from","type":"uint256"},{"internalType":"uint256","name":"_to","type":"uint256"}],"name":"getMultiplier","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"massUpdatePools","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_user","type":"address"}],"name":"pendingReward","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"poolInfo","outputs":[{"internalType":"contract IBEP20","name":"lpToken","type":"address"},{"internalType":"uint256","name":"allocPoint","type":"uint256"},{"internalType":"uint256","name":"lastRewardBlock","type":"uint256"},{"internalType":"uint256","name":"accCakePerShare","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"rewardPerBlock","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"rewardToken","outputs":[{"internalType":"contract IBEP20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"startBlock","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"stopReward","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"syrup","outputs":[{"internalType":"contract IBEP20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_pid","type":"uint256"}],"name":"updatePool","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"userInfo","outputs":[{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"uint256","name":"rewardDebt","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"withdraw","outputs":[],"stateMutability":"nonpayable","type":"function"}]',
@@ -95,14 +100,16 @@ def contract_checker(guy):
     if check_if_zeros == True and cake_list[0] == 0:
         return "ამ მისამართით CAKE, REEF, DITTO, bALBT, TEN, BSCX, BTCST, FRONT და HELMET Pool-ში CAKE არ არის დასტეიკებული!"
     else:
-        reef_pool = info_from_contract[0]
-        ditto_pool = info_from_contract[1]
-        albt_pool = info_from_contract[2]
-        ten_pool = info_from_contract[3]
-        bscx_pool = info_from_contract[4]
-        btcst_pool = info_from_contract[5]
-        helmet_pool = info_from_contract[6]
-        front_pool = info_from_contract[7]
+        ditto_pool = info_from_contract[0]
+        hget_pool = info_from_contract[1]
+        bdo_pool = info_from_contract[2]
+        egld_pool = info_from_contract[3]
+        ust_pool = info_from_contract[4]
+        wsote_pool = info_from_contract[5]
+        front_pool = info_from_contract[6]
+        helmet_pool = info_from_contract[7]
+        btcst_pool = info_from_contract[8]
+        bscx_pool = info_from_contract[9]
         cake_pool = cake_list[0]
         if cake_pool > 0:
             token_id = 'pancakeswap-token'
@@ -125,16 +132,16 @@ def contract_checker(guy):
             
         else:
             pass
-
-        if reef_pool > 0:
-            token_id = 'reef-finance'
-            coin_name = ' REEF'
+        
+        if ditto_pool > 0:
+            token_id = 'ditto'
+            coin_name = ' DITTO'
             addr = contract_list_address[0]
             abi = contract_list_abi[0]
             sm = w3.eth.contract(addr, abi=abi)
             staked_cake = sm.functions.userInfo(guy).call()[0]
-            pending_reward = sm.functions.pendingReward(guy).call() / 1000000000000000000
-            reward_per_block = sm.functions.rewardPerBlock().call() / 1000000000000000000
+            pending_reward = sm.functions.pendingReward(guy).call() / 1000000000
+            reward_per_block = sm.functions.rewardPerBlock().call() / 1000000000
             latest_block = w3.eth.blockNumber
             end_block = sm.functions.bonusEndBlock().call()
             coin_list = [token_id, 'binancecoin', 'bitcoin', 'ethereum', 'pancakeswap-token']
@@ -143,20 +150,17 @@ def contract_checker(guy):
                 coin_price = cg.get_price(ids=coinfasi, vs_currencies='usd')
                 coin_fasi = coin_price[coinfasi]['usd']
                 coin_list_price.append(coin_fasi)
-            contract_address = contract_list_address[0]
+            contract_address = contract_list_address[1]
             totalstakedcake = "https://api.bscscan.com/api?module=account&action=tokenbalance&contractaddress=0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82&address=" + contract_address + "&tag=latest"
             response = requests.get(totalstakedcake)
             qeiqebi = response.json()
             cakepool = (int(qeiqebi["result"]) / 1000000000000000000)
             info = calculations(coin_name, pending_reward, staked_cake, reward_per_block, coin_list_price, cakepool, sm, end_block, latest_block)
             info_earnd.append(info)
-            
-        else:
-            pass
 
-        if ditto_pool > 0:
-            token_id = 'ditto'
-            coin_name = ' DITTO'
+        if hget_pool > 0:
+            token_id = 'hedget'
+            coin_name = ' HGET'
             addr = contract_list_address[1]
             abi = contract_list_abi[1]
             sm = w3.eth.contract(addr, abi=abi)
@@ -178,19 +182,16 @@ def contract_checker(guy):
             cakepool = (int(qeiqebi["result"]) / 1000000000000000000)
             info = calculations(coin_name, pending_reward, staked_cake, reward_per_block, coin_list_price, cakepool, sm, end_block, latest_block)
             info_earnd.append(info)
-            
-        else:
-            pass
 
-        if albt_pool > 0:
-            token_id = 'allianceblock'
-            coin_name = ' bALBT'
+        if bdo_pool > 0:
+            token_id = 'bdollar'
+            coin_name = ' BDO'
             addr = contract_list_address[2]
             abi = contract_list_abi[2]
             sm = w3.eth.contract(addr, abi=abi)
             staked_cake = sm.functions.userInfo(guy).call()[0]
-            pending_reward = sm.functions.pendingReward(guy).call() / 1000000000000000000
-            reward_per_block = sm.functions.rewardPerBlock().call() / 1000000000000000000
+            pending_reward = sm.functions.pendingReward(guy).call() / 1000000000
+            reward_per_block = sm.functions.rewardPerBlock().call() / 1000000000
             latest_block = w3.eth.blockNumber
             end_block = sm.functions.bonusEndBlock().call()
             coin_list = [token_id, 'binancecoin', 'bitcoin', 'ethereum', 'pancakeswap-token']
@@ -206,19 +207,16 @@ def contract_checker(guy):
             cakepool = (int(qeiqebi["result"]) / 1000000000000000000)
             info = calculations(coin_name, pending_reward, staked_cake, reward_per_block, coin_list_price, cakepool, sm, end_block, latest_block)
             info_earnd.append(info)
-            
-        else:
-            pass
-
-        if ten_pool > 0:
-            token_id = 'tenet'
-            coin_name = ' TEN'
+        
+        if egld_pool > 0:
+            token_id = 'elrond-erd-2'
+            coin_name = ' EGLD'
             addr = contract_list_address[3]
             abi = contract_list_abi[3]
             sm = w3.eth.contract(addr, abi=abi)
             staked_cake = sm.functions.userInfo(guy).call()[0]
-            pending_reward = sm.functions.pendingReward(guy).call() / 1000000000000000000
-            reward_per_block = sm.functions.rewardPerBlock().call() / 1000000000000000000
+            pending_reward = sm.functions.pendingReward(guy).call() / 1000000000
+            reward_per_block = sm.functions.rewardPerBlock().call() / 1000000000
             latest_block = w3.eth.blockNumber
             end_block = sm.functions.bonusEndBlock().call()
             coin_list = [token_id, 'binancecoin', 'bitcoin', 'ethereum', 'pancakeswap-token']
@@ -234,19 +232,16 @@ def contract_checker(guy):
             cakepool = (int(qeiqebi["result"]) / 1000000000000000000)
             info = calculations(coin_name, pending_reward, staked_cake, reward_per_block, coin_list_price, cakepool, sm, end_block, latest_block)
             info_earnd.append(info)
-            
-        else:
-            pass
 
-        if bscx_pool > 0:
-            token_id = 'bscex'
-            coin_name = ' BSCX'
+        if ust_pool > 0:
+            token_id = 'terrausd'
+            coin_name = ' UST'
             addr = contract_list_address[4]
             abi = contract_list_abi[4]
             sm = w3.eth.contract(addr, abi=abi)
             staked_cake = sm.functions.userInfo(guy).call()[0]
-            pending_reward = sm.functions.pendingReward(guy).call() / 1000000000000000000
-            reward_per_block = sm.functions.rewardPerBlock().call() / 1000000000000000000
+            pending_reward = sm.functions.pendingReward(guy).call() / 1000000000
+            reward_per_block = sm.functions.rewardPerBlock().call() / 1000000000
             latest_block = w3.eth.blockNumber
             end_block = sm.functions.bonusEndBlock().call()
             coin_list = [token_id, 'binancecoin', 'bitcoin', 'ethereum', 'pancakeswap-token']
@@ -262,19 +257,16 @@ def contract_checker(guy):
             cakepool = (int(qeiqebi["result"]) / 1000000000000000000)
             info = calculations(coin_name, pending_reward, staked_cake, reward_per_block, coin_list_price, cakepool, sm, end_block, latest_block)
             info_earnd.append(info)
-            
-        else:
-            pass
-        
-        if btcst_pool > 0:
-            token_id = 'btc-standard-hashrate-token'
-            coin_name = ' BTCST'
+
+        if wsote_pool > 0:
+            token_id = 'soteria'
+            coin_name = ' wSOTE'
             addr = contract_list_address[5]
             abi = contract_list_abi[5]
             sm = w3.eth.contract(addr, abi=abi)
             staked_cake = sm.functions.userInfo(guy).call()[0]
-            pending_reward = sm.functions.pendingReward(guy).call() / 1000000000000000000
-            reward_per_block = sm.functions.rewardPerBlock().call() / 1000000000000000000
+            pending_reward = sm.functions.pendingReward(guy).call() / 1000000000
+            reward_per_block = sm.functions.rewardPerBlock().call() / 1000000000
             latest_block = w3.eth.blockNumber
             end_block = sm.functions.bonusEndBlock().call()
             coin_list = [token_id, 'binancecoin', 'bitcoin', 'ethereum', 'pancakeswap-token']
@@ -290,19 +282,16 @@ def contract_checker(guy):
             cakepool = (int(qeiqebi["result"]) / 1000000000000000000)
             info = calculations(coin_name, pending_reward, staked_cake, reward_per_block, coin_list_price, cakepool, sm, end_block, latest_block)
             info_earnd.append(info)
-            
-        else:
-            pass
 
-        if helmet_pool > 0:
-            token_id = 'helmet-insure'
-            coin_name = ' HELMET'
+        if front_pool > 0:
+            token_id = 'frontier'
+            coin_name = ' FRONT'
             addr = contract_list_address[6]
             abi = contract_list_abi[6]
             sm = w3.eth.contract(addr, abi=abi)
             staked_cake = sm.functions.userInfo(guy).call()[0]
-            pending_reward = sm.functions.pendingReward(guy).call() / 1000000000000000000
-            reward_per_block = sm.functions.rewardPerBlock().call() / 1000000000000000000
+            pending_reward = sm.functions.pendingReward(guy).call() / 1000000000
+            reward_per_block = sm.functions.rewardPerBlock().call() / 1000000000
             latest_block = w3.eth.blockNumber
             end_block = sm.functions.bonusEndBlock().call()
             coin_list = [token_id, 'binancecoin', 'bitcoin', 'ethereum', 'pancakeswap-token']
@@ -318,18 +307,16 @@ def contract_checker(guy):
             cakepool = (int(qeiqebi["result"]) / 1000000000000000000)
             info = calculations(coin_name, pending_reward, staked_cake, reward_per_block, coin_list_price, cakepool, sm, end_block, latest_block)
             info_earnd.append(info)
-        else:
-            pass
-
-        if front_pool > 0:
-            token_id = 'frontier-token'
-            coin_name = ' FRONT'
+        
+        if helmet_pool > 0:
+            token_id = 'helmet-insure'
+            coin_name = ' HELMET'
             addr = contract_list_address[7]
             abi = contract_list_abi[7]
             sm = w3.eth.contract(addr, abi=abi)
             staked_cake = sm.functions.userInfo(guy).call()[0]
-            pending_reward = sm.functions.pendingReward(guy).call() / 1000000000000000000
-            reward_per_block = sm.functions.rewardPerBlock().call() / 1000000000000000000
+            pending_reward = sm.functions.pendingReward(guy).call() / 1000000000
+            reward_per_block = sm.functions.rewardPerBlock().call() / 1000000000
             latest_block = w3.eth.blockNumber
             end_block = sm.functions.bonusEndBlock().call()
             coin_list = [token_id, 'binancecoin', 'bitcoin', 'ethereum', 'pancakeswap-token']
@@ -345,8 +332,56 @@ def contract_checker(guy):
             cakepool = (int(qeiqebi["result"]) / 1000000000000000000)
             info = calculations(coin_name, pending_reward, staked_cake, reward_per_block, coin_list_price, cakepool, sm, end_block, latest_block)
             info_earnd.append(info)
-        else:
-            pass
+
+        if btcst_pool > 0:
+            token_id = 'btc-standard-hashrate-token'
+            coin_name = ' BTCST'
+            addr = contract_list_address[8]
+            abi = contract_list_abi[8]
+            sm = w3.eth.contract(addr, abi=abi)
+            staked_cake = sm.functions.userInfo(guy).call()[0]
+            pending_reward = sm.functions.pendingReward(guy).call() / 1000000000
+            reward_per_block = sm.functions.rewardPerBlock().call() / 1000000000
+            latest_block = w3.eth.blockNumber
+            end_block = sm.functions.bonusEndBlock().call()
+            coin_list = [token_id, 'binancecoin', 'bitcoin', 'ethereum', 'pancakeswap-token']
+            coin_list_price = []
+            for coinfasi in coin_list:
+                coin_price = cg.get_price(ids=coinfasi, vs_currencies='usd')
+                coin_fasi = coin_price[coinfasi]['usd']
+                coin_list_price.append(coin_fasi)
+            contract_address = contract_list_address[8]
+            totalstakedcake = "https://api.bscscan.com/api?module=account&action=tokenbalance&contractaddress=0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82&address=" + contract_address + "&tag=latest"
+            response = requests.get(totalstakedcake)
+            qeiqebi = response.json()
+            cakepool = (int(qeiqebi["result"]) / 1000000000000000000)
+            info = calculations(coin_name, pending_reward, staked_cake, reward_per_block, coin_list_price, cakepool, sm, end_block, latest_block)
+            info_earnd.append(info)
+
+        if bscx_pool > 0:
+            token_id = 'bscex'
+            coin_name = ' BSCEX'
+            addr = contract_list_address[9]
+            abi = contract_list_abi[9]
+            sm = w3.eth.contract(addr, abi=abi)
+            staked_cake = sm.functions.userInfo(guy).call()[0]
+            pending_reward = sm.functions.pendingReward(guy).call() / 1000000000
+            reward_per_block = sm.functions.rewardPerBlock().call() / 1000000000
+            latest_block = w3.eth.blockNumber
+            end_block = sm.functions.bonusEndBlock().call()
+            coin_list = [token_id, 'binancecoin', 'bitcoin', 'ethereum', 'pancakeswap-token']
+            coin_list_price = []
+            for coinfasi in coin_list:
+                coin_price = cg.get_price(ids=coinfasi, vs_currencies='usd')
+                coin_fasi = coin_price[coinfasi]['usd']
+                coin_list_price.append(coin_fasi)
+            contract_address = contract_list_address[9]
+            totalstakedcake = "https://api.bscscan.com/api?module=account&action=tokenbalance&contractaddress=0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82&address=" + contract_address + "&tag=latest"
+            response = requests.get(totalstakedcake)
+            qeiqebi = response.json()
+            cakepool = (int(qeiqebi["result"]) / 1000000000000000000)
+            info = calculations(coin_name, pending_reward, staked_cake, reward_per_block, coin_list_price, cakepool, sm, end_block, latest_block)
+            info_earnd.append(info)
         print(info_earnd)
         print_all = ('\n'.join(map(str, info_earnd))) + "\n"
         return print_all
@@ -495,7 +530,7 @@ def calculations(coin_name, pending_reward, staked_cake, reward_per_block, coin_
             "🕐 დამთავრებამდე დააგროვებ: " + '{0:,.2f}'.format(float(darchenili_dge)) + " ($" + '{0:,.2f}'.format(float(darchenili_dge_price)) + ")" + "\n"
     return info
 
-@bot.message_handler(func=lambda message: message.text == "cake" or message.text == "🥞" or message.text == "Cake" or message.text == "CAKE")
+@bot.message_handler(func=lambda message: message.text == "cake" or message.text == "🥞" or message.text == "Cake" or message.text == "CAKE" or message.text == "/p cake")
 def command_text_hi(message):
     if check_ping:
         cid = message.chat.id
@@ -527,17 +562,16 @@ def send_pcs_info(message: Message):
     if check_ping():
         cid = message.chat.id
         cake = '0x73feaa1eE314F8c655E354234017bE2193C9E24E'
-        reef = '0x1500fA1AFBFE4f4277ED0345cdf12b2C9cA7e139'
         ditto = '0x624ef5C2C6080Af188AF96ee5B3160Bb28bb3E02'
+        hget = '0xcCD0b93cC6ce3dC6dFaA9DB68f70e5C8455aC5bd'
+        bdo = '0x9cB24e9460351bC51d4066BC6AEd1F3809b02B78'
+        egld = '0x2dcf4cDFf4Dd954683Fe0a6123077f8a025b66cF'
+        ust = '0x6EFa207ACdE6e1caB77c1322CbdE9628929ba88F'
+        wsote = '0xD0b738eC507571176D40f28bd56a0120E375f73a'
         front = '0xf7a31366732F08E8e6B88519dC3E827e04616Fc9'
         helmet = '0x9F23658D5f4CEd69282395089B0f8E4dB85C6e79'
         btcst = '0xB6fd2724cc9c90DD31DA35DbDf0300009dceF97d'
-        ten = '0x108BFE84Ca8BCe0741998cb0F60d313823cEC143'
-        albt = '0x3cc08B7C6A31739CfEd9d8d38b484FDb245C79c8'
-        juv = '0x543467B17cA5De50c8BF7285107A36785Ab57E56'
-        psg = '0x65aFEAFaec49F23159e897EFBDCe19D94A86A1B6'
-        twt = '0x9c4EBADa591FFeC4124A7785CAbCfb7068fED2fb'
-        wsote = '0xD0b738eC507571176D40f28bd56a0120E375f73a'
+        bscx = '0x108BFE84Ca8BCe0741998cb0F60d313823cEC143'
         cake_bnb_farm = '0xA527a61703D82139F8a06Bc30097cC9CAA2df5A6'
         cake_stax = '0x7cd05f8b960Ba071FdF69C750c0E5a57C8366500'
         cake_nar = '0x745C4fD226E169d6da959283275A8E0EcDd7F312'
@@ -546,8 +580,8 @@ def send_pcs_info(message: Message):
         burn_address = '0x000000000000000000000000000000000000dEaD'
         burn_address_1 = '0x35f16A46D3cf19010d28578A8b02DfA3CB4095a1'
         burn_address_2 = '0xd4CFEC77CDc21573982EC85cf33Cfde6Cc677e74'
-        contracts = [cake, reef, ditto, front, helmet, btcst, ten, albt, juv, psg, twt, wsote]
-        contract_names = ["CAKE","REEF", "DITTO", "FRONT", "HELMET", "BTCST", "TEN", "ALBT", "JUV", "PSG", "TWT", 'wSOTE']
+        contracts = [cake, ditto, hget, bdo, egld, ust, wsote, front, helmet, btcst, bscx]
+        contract_names = ["CAKE", "DITTO", "HGET", "BDO", "EGLD", "UST", "WSOTE", "FRONT", "HELMET", "BTCST", "BSCX"]
         contract_address = ['0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82']
         contract_abi = ['[{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":true,"internalType":"address","name":"spender","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Approval","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"delegator","type":"address"},{"indexed":true,"internalType":"address","name":"fromDelegate","type":"address"},{"indexed":true,"internalType":"address","name":"toDelegate","type":"address"}],"name":"DelegateChanged","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"delegate","type":"address"},{"indexed":false,"internalType":"uint256","name":"previousBalance","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"newBalance","type":"uint256"}],"name":"DelegateVotesChanged","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Transfer","type":"event"},{"inputs":[],"name":"DELEGATION_TYPEHASH","outputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"DOMAIN_TYPEHASH","outputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"owner","type":"address"},{"internalType":"address","name":"spender","type":"address"}],"name":"allowance","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"approve","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"balanceOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"},{"internalType":"uint32","name":"","type":"uint32"}],"name":"checkpoints","outputs":[{"internalType":"uint32","name":"fromBlock","type":"uint32"},{"internalType":"uint256","name":"votes","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"decimals","outputs":[{"internalType":"uint8","name":"","type":"uint8"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"subtractedValue","type":"uint256"}],"name":"decreaseAllowance","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"delegatee","type":"address"}],"name":"delegate","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"delegatee","type":"address"},{"internalType":"uint256","name":"nonce","type":"uint256"},{"internalType":"uint256","name":"expiry","type":"uint256"},{"internalType":"uint8","name":"v","type":"uint8"},{"internalType":"bytes32","name":"r","type":"bytes32"},{"internalType":"bytes32","name":"s","type":"bytes32"}],"name":"delegateBySig","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"delegator","type":"address"}],"name":"delegates","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"getCurrentVotes","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getOwner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"account","type":"address"},{"internalType":"uint256","name":"blockNumber","type":"uint256"}],"name":"getPriorVotes","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"addedValue","type":"uint256"}],"name":"increaseAllowance","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_to","type":"address"},{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"mint","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"mint","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"name","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"nonces","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"numCheckpoints","outputs":[{"internalType":"uint32","name":"","type":"uint32"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"symbol","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalSupply","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"recipient","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"transfer","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"sender","type":"address"},{"internalType":"address","name":"recipient","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"transferFrom","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"}]']
         contract_balances = []
@@ -587,22 +621,18 @@ def send_pcs_info(message: Message):
         response = requests.get(cakestat)
         stats = response.json()
         total_value_locked_all = stats['total_value_locked_all']
+        mondeyBurn_price = mondeyBurn * coin_fasi
+        burned_price = burned * coin_fasi
         info = "🔸 სრული რაოდენობა: " + '{0:,.2f}'.format(float(totalsupply)) + "\n" + \
             "🔸 დამწვარია: " + '{0:,.2f}'.format(float(burned)) + "\n" + \
-            "🔸 ორშაბათს დაიწვება: " + '{0:,.2f}'.format(float(mondeyBurn)) + "\n" + \
-            "` - - - - - - - - - - - - - `" + "\n" + \
-            str(sul_balansi) + "\n" + \
-            "`- - - - - - - - - - - - - `" + "\n" + \
-            "🔸 CAKE-BNB: " + '{0:,.2f}'.format(float(cakebnb)) + "\n" + \
-            "🔸 CAKE-STAX: " + '{0:,.2f}'.format(float(staxcake)) + "\n" + \
-            "🔸 CAKE-NAR: " + '{0:,.2f}'.format(float(narcake)) + "\n" + \
-            "🔸 CAKE-NYA: " + '{0:,.2f}'.format(float(nyacake)) + "\n" + \
-            "🔸 CAKE-BROOBE: " + '{0:,.2f}'.format(float(brobecake)) + "\n" + \
+            "🔸 დაიწვება: " + '{0:,.2f}'.format(float(mondeyBurn)) + " ($" + '{0:,.2f}'.format(float(mondeyBurn_price)) + ")" + "\n" + \
             "`- - - - - - - - - - - - - `" + "\n" + \
             "🔸 Binance: " + '{0:,.2f}'.format(float(binance)) + " ($" + '{0:,.2f}'.format(float(binance_price)) + ")" + "\n" + \
             "`- - - - - - - - - - - - - `" + "\n" + \
             "🔸 სულ დასტეიკებულია : " + '{0:,.2f}'.format(float(total)) + " ($" + '{0:,.2f}'.format(float(total_price)) + ")" + "\n" + \
             "🔸 სულ: " + '{0:,.2f}'.format(float(staked_percent)) + "%" + "\n" + \
+            "`- - - - - - - - - - - - - `" + "\n" + \
+            "🔸 სულ დამწვარია: " + "$" + '{0:,.2f}'.format(float(burned_price)) + "\n" + \
             "`- - - - - - - - - - - - - `" + "\n" + \
             "🔸 TVL: $" + '{0:,.2f}'.format(float(total_value_locked_all))
 
